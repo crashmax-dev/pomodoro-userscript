@@ -1,7 +1,7 @@
 {
-  "name": "vite-userscript-template",
+  "name": "pomodoro-userscript",
   "private": true,
-  "homepage": "https://crashmax-dev.github.io/vite-userscript-template/",
+  "homepage": "https://crashmax-dev.github.io/pomodoro-userscript/",
   "version": "0.0.1",
   "type": "module",
   "author": "crashmax <userscript@crashmax.ru>",
