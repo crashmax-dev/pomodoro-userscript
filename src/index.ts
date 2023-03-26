@@ -1,15 +1,28 @@
-import { el } from '@zero-dependency/dom'
+import { Draggable } from './draggable.js'
+import { TimerInput } from './timer-input.js'
+import { Widget } from './widget.js'
 import './style.scss'
 
-const card = el(
-  'div',
-  { className: 'card' },
-  el('h1', { className: 'title' }, 'Hello World'),
-  el(
-    'p',
-    'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tenetur, ipsa.'
-  ),
-  el('a', { href: 'https://google.com', target: '_blank' }, 'Link')
-)
+class App {
+  private readonly timer = new TimerInput()
+  private readonly draggable = new Draggable()
+  private readonly widget = new Widget()
 
-document.body.appendChild(card)
+  mount() {
+    this.timer.mount()
+    this.widget.mount(this.draggable, this.timer)
+    this.draggable.mount(this.widget.el)
+
+    window.addEventListener('storage', (event) => {
+      switch (event.key) {
+        case 'position':
+          return this.draggable.updatePosition()
+        case 'timer':
+          return this.timer.updateInputValues()
+      }
+    })
+  }
+}
+
+const app = new App()
+app.mount()
