@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>vite-userscript-template</title>
+  <title>pomodoro-userscript</title>
   <style>
     body {
       margin: 0;
@@ -12,7 +12,7 @@
       font-family: sans-serif;
     }
 
-    div {
+    .container {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -20,18 +20,18 @@
       height: 100vh;
     }
 
-    h1 {
+    .container h1 {
       font-size: 2rem;
       margin: 0;
     }
 
-    p {
+    .container p {
       font-size: 1rem;
       margin: 0;
       padding-top: 1rem;
     }
 
-    button {
+    .container button {
       padding: 0.5rem 1rem;
       margin-top: 1rem;
       border: none;
@@ -45,8 +45,8 @@
 </head>
 
 <body>
-  <div>
-    <h1>vite-userscript-template</h1>
+  <div class="container">
+    <h1>pomodoro-userscript</h1>
     <p>Template for creating Userscripts with Vite</p>
     <button>Install</button>
   </div>
@@ -55,9 +55,9 @@
     const button = document.querySelector('button')
     button.addEventListener('click', () => {
       if (isDev) {
-        location.href = 'vite-userscript-template.proxy.user.js'
+        location.href = 'pomodoro-userscript.proxy.user.js'
       } else {
-        location.href = 'vite-userscript-template.user.js'
+        location.href = 'pomodoro-userscript.user.js'
       }
     })
 
