@@ -1,15 +1,11 @@
 import { clearInterval, setInterval } from 'worker-timers'
+import { events } from './events.js'
 import type { Time } from './timer-input.js'
 
 export class Countdown {
-  private interval: number
+  private interval: number | null
   private minutes: number
   private seconds: number
-
-  constructor(
-    private readonly onTick: (time: Time) => void,
-    private readonly onStop: () => void
-  ) {}
 
   setTime({ minutes, seconds }: Time): void {
     this.minutes = minutes
@@ -24,6 +20,7 @@ export class Countdown {
   stop(): void {
     if (!this.interval) return
     clearInterval(this.interval)
+    this.interval = null
   }
 
   private tick(): void {
@@ -35,9 +32,9 @@ export class Countdown {
     }
 
     if (this.minutes === 0 && this.seconds === 0) {
-      this.onStop()
+      events.emit('timer_stop')
     }
 
-    this.onTick({ minutes: this.minutes, seconds: this.seconds })
+    events.emit('timer_tick', { minutes: this.minutes, seconds: this.seconds })
   }
 }

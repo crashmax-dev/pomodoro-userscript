@@ -1,5 +1,6 @@
 import { el } from '@zero-dependency/dom'
 import { LocalStorage } from '@zero-dependency/storage'
+import { events } from './events.js'
 import { addZero } from './utils.js'
 
 const inputs = ['minutes', 'seconds'] as const
@@ -19,6 +20,10 @@ export class TimerInput {
   private minutes: InputElement
   private inputClock = 0
   private currentInput: InputElement
+  private tempStore = new LocalStorage<Time>('temp_timer', {
+    minutes: 0,
+    seconds: 0
+  })
   private store = new LocalStorage<Time>('timer', { minutes: 0, seconds: 0 })
 
   get currentState() {
@@ -58,17 +63,21 @@ export class TimerInput {
     switch (event.key) {
       case 'Enter':
       case 'Escape':
-        return this.currentInput.blur()
+        events.emit('timer_start', this.store.values)
+        this.currentInput.blur()
+        break
       case 'ArrowLeft':
       case 'ArrowRight':
-        return this.navigateInput()
+        this.navigateInput()
+        break
       case 'ArrowUp':
       case 'ArrowDown':
-        return this.incrementInputValue(event.key === 'ArrowUp' ? 1 : -1)
+        this.incrementInputValue(event.key === 'ArrowUp' ? 1 : -1)
+        break
+      default:
+        if (Number.isNaN(parseInt(event.key))) return
+        this.changeInputValue(event.key)
     }
-
-    if (Number.isNaN(parseInt(event.key))) return
-    this.changeInputValue(event.key)
   }
 
   private navigateInput(): void {
@@ -131,7 +140,7 @@ export class TimerInput {
     )
 
     if (time) {
-      this.store.write(time)
+      this.tempStore.write(time)
     }
   }
 }
