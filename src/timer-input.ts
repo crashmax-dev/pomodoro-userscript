@@ -1,7 +1,15 @@
-import { el, text } from '@zero-dependency/dom'
+import { el } from '@zero-dependency/dom'
 import { LocalStorage } from '@zero-dependency/storage'
 import { addZero } from './utils.js'
 
+const inputs = ['minutes', 'seconds'] as const
+
+export interface Time {
+  minutes: number
+  seconds: number
+}
+
+type InputType = typeof inputs[number]
 type InputElement = HTMLDivElement
 
 export class TimerInput {
@@ -11,18 +19,16 @@ export class TimerInput {
   private minutes: InputElement
   private inputClock = 0
   private currentInput: InputElement
-  private store = new LocalStorage('timer', { minutes: 0, seconds: 0 })
+  private store = new LocalStorage<Time>('timer', { minutes: 0, seconds: 0 })
 
   get currentState() {
     return {
-      type: this.currentInput.dataset['type']!,
-      textContent: this.currentInput.textContent!
+      type: this.currentInput.dataset['type']! as InputType,
+      time: this.currentInput.textContent!
     }
   }
 
   mount(): void {
-    const inputs = ['minutes', 'seconds'] as const
-
     for (const inputName of inputs) {
       const input = el('div', { contentEditable: 'true' })
       input.dataset['type'] = inputName
@@ -73,61 +79,59 @@ export class TimerInput {
   }
 
   private changeInputValue(num: string): void {
-    const { type, textContent } = this.currentState
+    const { type, time } = this.currentState
+    const newValue = this.inputClock
+      ? time.slice(1) + num
+      : time.slice(0, 1) + num
 
-    const newValue = parseInt(
-      this.inputClock
-        ? textContent.slice(1) + num
-        : textContent.slice(0, 1) + num
-    )
-
-    switch (type) {
-      case 'minutes':
-        this.changeMinutesValue(newValue)
-        break
-      case 'seconds':
-        this.changeSecondsValue(newValue)
-        break
-    }
-
+    const value = this.parseTime(type, newValue)
+    this.writeInputValues(type, value)
     this.updateInputClock()
   }
 
-  private incrementInputValue(num: number): void {
-    const { type, textContent } = this.currentState
-    const currentValue = parseInt(textContent)
-
-    switch (type) {
-      case 'minutes':
-        return this.changeMinutesValue(currentValue + num)
-      case 'seconds':
-        return this.changeSecondsValue(currentValue + num)
-    }
+  private incrementInputValue(inc: number): void {
+    const { type, time } = this.currentState
+    const value = this.parseTime(type, time, inc)
+    this.writeInputValues(type, value)
   }
 
-  private changeMinutesValue(value: number): void {
-    if (value < 0) value = 99
-    if (value > 99) value = 0
-
-    this.minutes.textContent = addZero(value)
-    this.store.write((prevValue) => ({ ...prevValue, minutes: value }))
-  }
-
-  private changeSecondsValue(value: number): void {
-    if (value < 0) value = 59
-    if (value > 59) value = 0
-
-    this.seconds.textContent = addZero(value)
-    this.store.write((prevValue) => ({ ...prevValue, seconds: value }))
+  private writeInputValues(type: InputType, value: number): void {
+    this[type].textContent = addZero(value)
+    this.store.write((prevValue) => ({ ...prevValue, [type]: value }))
   }
 
   private updateInputClock(value?: number): void {
     this.inputClock = value ?? (this.inputClock + 1) % 2
   }
 
-  updateInputValues(): void {
-    const { minutes, seconds } = this.store.values
-    this.minutes.textContent = addZero(minutes)
-    this.seconds.textContent = addZero(seconds)
+  private parseTime(type: InputType, time: string, inc: number = 0): number {
+    let parsedTime = parseInt(time) + inc
+
+    switch (type) {
+      case 'minutes':
+        if (parsedTime < 0) parsedTime = 99
+        if (parsedTime > 99) parsedTime = 0
+        break
+      case 'seconds':
+        if (parsedTime < 0) parsedTime = 59
+        if (parsedTime > 59) parsedTime = 0
+        break
+    }
+
+    return parsedTime
+  }
+
+  updateInputValues(time?: Time): void {
+    const storeValues = this.store.values
+    this.minutes.textContent = addZero(
+      time ? time.minutes : storeValues.minutes
+    )
+    this.seconds.textContent = addZero(
+      time ? time.seconds : storeValues.seconds
+    )
+
+    if (time) {
+      this.store.write(time)
+    }
   }
 }

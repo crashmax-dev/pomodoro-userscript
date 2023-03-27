@@ -5,18 +5,20 @@ specifiers:
   '@crashmax/tsconfig': 2.0.1
   '@zero-dependency/dom': 0.12.0
   '@zero-dependency/emitter': 1.1.3
-  '@zero-dependency/interact': ^0.1.3
+  '@zero-dependency/interact': 0.1.3
   '@zero-dependency/storage': 0.3.0
   sass: 1.60.0
   typescript: 5.0.2
   vite: 4.2.1
-  vite-userscript-plugin: 1.8.0
+  vite-userscript-plugin: 1.8.1
+  worker-timers: 7.0.63
 
 dependencies:
   '@zero-dependency/dom': 0.12.0
   '@zero-dependency/emitter': 1.1.3
   '@zero-dependency/interact': 0.1.3
   '@zero-dependency/storage': 0.3.0
+  worker-timers: 7.0.63
 
 devDependencies:
   '@crashmax/prettier-config': 3.2.1_za6dmrbiogn3z6m2plsv3qsi6m
@@ -24,7 +26,7 @@ devDependencies:
   sass: 1.60.0
   typescript: 5.0.2
   vite: 4.2.1_sass@1.60.0
-  vite-userscript-plugin: 1.8.0_vite@4.2.1
+  vite-userscript-plugin: 1.8.1_vite@4.2.1
 
 packages:
 
@@ -200,6 +202,13 @@ packages:
     dependencies:
       '@babel/types': 7.21.3
     dev: true
+
+  /@babel/runtime/7.21.0:
+    resolution: {integrity: sha512-xwII0//EObnq89Ji5AKYQaRYiW/nZ3llSv29d49IuxPhKbtJoLP+9QUUZ4nVragQVtaVGeZrpB+ZtG/Pdy/POw==}
+    engines: {node: '>=6.9.0'}
+    dependencies:
+      regenerator-runtime: 0.13.11
+    dev: false
 
   /@babel/template/7.20.7:
     resolution: {integrity: sha512-8SegXApWe6VoNw0r9JHpSteLKTpTiLZ4rMlGIm9JQ18KiCtyQiAMEazujAHrUS5flrcqYZa75ukev3P6QmUwUw==}
@@ -764,6 +773,14 @@ packages:
       type: 2.7.2
     dev: true
 
+  /fast-unique-numbers/7.0.2:
+    resolution: {integrity: sha512-xnqpsnu889bHbq5cbDMwCJ2BPf6kjFPMu+RHfqKvisRxeEbTOVxY5aW/ZNsZ/r8OlwatxmjdFEVQog2xAhLkvg==}
+    engines: {node: '>=14.15.4'}
+    dependencies:
+      '@babel/runtime': 7.21.0
+      tslib: 2.5.0
+    dev: false
+
   /fast-url-parser/1.1.3:
     resolution: {integrity: sha512-5jOCVXADYNuRkKFzNJ0dCCewsZiYo0dz8QNYljkOpFC6r2U4OBmKtvm/Tsuh4w1YYdDqDb31a8TVhBJ2OJKdqQ==}
     dependencies:
@@ -1025,6 +1042,10 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /regenerator-runtime/0.13.11:
+    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
+    dev: false
+
   /resolve/1.22.1:
     resolution: {integrity: sha512-nBpuuYuY5jFsli/JIs1oldw6fOQCBioohqWZg/2hiaOybXOft4lonv85uDOKXdf8rhyK159cxU5cDcK/NKk8zw==}
     hasBin: true
@@ -1099,6 +1120,10 @@ packages:
       is-number: 7.0.0
     dev: true
 
+  /tslib/2.5.0:
+    resolution: {integrity: sha512-336iVw3rtn2BUK7ORdIAHTyxHGRIHVReokCR3XjbckJMK7ms8FysBfhLR8IXnAgy7T0PTPNBWKiH514FOW/WSg==}
+    dev: false
+
   /type-fest/3.7.0:
     resolution: {integrity: sha512-A2qUJ/j8vkKIT+UorxayZjFJoEdNkIPZkjOJSWezoAbRQd7QEhnz2iJlfVy4Or0GuEnCXts5cNorQNUvdLkaSQ==}
     engines: {node: '>=14.16'}
@@ -1143,8 +1168,8 @@ packages:
       node-gyp-build: 4.6.0
     dev: true
 
-  /vite-userscript-plugin/1.8.0_vite@4.2.1:
-    resolution: {integrity: sha512-Go87A4Kj7vCT4txNTW236EF45s3pGXJFSjzhAYB0jlACny/lolbOj5A3kwJJzqTiKP0dGTmQ8NleS/yMgnlMSg==}
+  /vite-userscript-plugin/1.8.1_vite@4.2.1:
+    resolution: {integrity: sha512-GHSUk4CyqwOdvCiNBriFDXcQ44noYktV6+KigUXwAqoCB/6JGFteKQaspiWcEnlGWnj+C1P5NSRvE5Z3BtAQkw==}
     peerDependencies:
       vite: '>=3.0.0'
     dependencies:
@@ -1205,6 +1230,31 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /worker-timers-broker/6.0.83:
+    resolution: {integrity: sha512-dzOEpJHCcUTGXpKY7mKNWZ2TcZz76mSH2V1dasfaoPlxLaW0tbubdunRF7Vi/Ueqrci60m4SaEfFbH82ZdsHMg==}
+    dependencies:
+      '@babel/runtime': 7.21.0
+      fast-unique-numbers: 7.0.2
+      tslib: 2.5.0
+      worker-timers-worker: 7.0.49
+    dev: false
+
+  /worker-timers-worker/7.0.49:
+    resolution: {integrity: sha512-pKx9/HYUu83z2CbbL7/HcYxgT+5Qtrty5VZcOU4FmVEqp9Y8eHuy3F3KHrxwOd/1kR02/ftSBWPGZUkls659vQ==}
+    dependencies:
+      '@babel/runtime': 7.21.0
+      tslib: 2.5.0
+    dev: false
+
+  /worker-timers/7.0.63:
+    resolution: {integrity: sha512-YHBp6kDZpDMtVnadzXDyKdEv+W/6vSLp8hwaJJkF/0GQqCE3ywGAb0CXVVWFeHP+9jkxBk6sp2D6UbBqQO27PA==}
+    dependencies:
+      '@babel/runtime': 7.21.0
+      tslib: 2.5.0
+      worker-timers-broker: 6.0.83
+      worker-timers-worker: 7.0.49
+    dev: false
 
   /yaeti/0.0.6:
     resolution: {integrity: sha512-MvQa//+KcZCUkBTIC9blM+CU9J2GzuTytsOUwf2lidtvkx/6gnEp1QvJv34t9vdjhFmha/mUiNDbN0D0mJWdug==}
