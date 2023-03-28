@@ -1,15 +1,15 @@
 import { el } from '@zero-dependency/dom'
-import { Draggable } from './draggable.js'
+import { DraggableOverlay } from './draggable-overlay.js'
 import { TimerInput } from './timer-input.js'
 
 export class Widget {
   el: HTMLDivElement
 
   private container: HTMLDivElement
-  private draggable: Draggable
+  private draggable: DraggableOverlay
   private timer: TimerInput
 
-  mount(draggable: Draggable, timer: TimerInput): void {
+  mount(draggable: DraggableOverlay, timer: TimerInput): void {
     this.timer = timer
     this.draggable = draggable
 

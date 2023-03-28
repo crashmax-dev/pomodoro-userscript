@@ -1,7 +1,7 @@
 import { el } from '@zero-dependency/dom'
 import { LocalStorage } from '@zero-dependency/storage'
-import { events } from './events.js'
-import { addZero } from './utils.js'
+import { events } from '../libs/events.js'
+import { addZero } from '../utils.js'
 
 const inputs = ['minutes', 'seconds'] as const
 

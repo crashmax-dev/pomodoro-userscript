@@ -1,19 +1,19 @@
-import { Countdown } from './countdown.js'
-import { Draggable } from './draggable.js'
-import { events } from './events.js'
-import { TimerInput } from './timer-input.js'
-import { Widget } from './widget.js'
-import './style.scss'
+import { Countdown } from './features/countdown.js'
+import { events } from './libs/events.js'
+import { DraggableOverlay } from './ui/draggable-overlay.js'
+import { TimerInput } from './ui/timer-input.js'
+import { Widget } from './ui/widget.js'
+import './styles/global.scss'
 
 class App {
   private readonly timer: TimerInput
-  private readonly draggable: Draggable
+  private readonly draggable: DraggableOverlay
   private readonly widget: Widget
   private readonly countdown: Countdown
 
   constructor() {
     this.timer = new TimerInput()
-    this.draggable = new Draggable()
+    this.draggable = new DraggableOverlay()
     this.widget = new Widget()
     this.countdown = new Countdown()
   }

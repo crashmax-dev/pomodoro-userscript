@@ -2,7 +2,7 @@ import { el } from '@zero-dependency/dom'
 import { Interact } from '@zero-dependency/interact'
 import { LocalStorage } from '@zero-dependency/storage'
 
-export class Draggable {
+export class DraggableOverlay {
   el: HTMLElement
 
   private interact: Interact
