@@ -1,6 +1,6 @@
 import { clearInterval, setInterval } from 'worker-timers'
 import { events } from '../libs/events.js'
-import type { Time } from '../ui/timer-input.js'
+import type { Time } from '../libs/storage.js'
 
 export class Countdown {
   private interval: number | null

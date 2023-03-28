@@ -1,6 +1,6 @@
 import { el } from '@zero-dependency/dom'
-import { LocalStorage } from '@zero-dependency/storage'
 import { events } from '../libs/events.js'
+import { store } from '../libs/storage.js'
 import { addZero } from '../utils.js'
 
 const inputs = ['minutes', 'seconds'] as const
@@ -20,13 +20,8 @@ export class TimerInput {
   private minutes: InputElement
   private inputClock = 0
   private currentInput: InputElement
-  private tempStore = new LocalStorage<Time>('temp_timer', {
-    minutes: 0,
-    seconds: 0
-  })
-  private store = new LocalStorage<Time>('timer', { minutes: 0, seconds: 0 })
 
-  get currentState() {
+  get inputData() {
     return {
       type: this.currentInput.dataset['type']! as InputType,
       time: this.currentInput.textContent!
@@ -63,7 +58,7 @@ export class TimerInput {
     switch (event.key) {
       case 'Enter':
       case 'Escape':
-        events.emit('timer_start', this.store.values)
+        events.emit('timer_start', store.getByKey('time'))
         this.currentInput.blur()
         break
       case 'ArrowLeft':
@@ -88,7 +83,7 @@ export class TimerInput {
   }
 
   private changeInputValue(num: string): void {
-    const { type, time } = this.currentState
+    const { type, time } = this.inputData
     const newValue = this.inputClock
       ? time.slice(1) + num
       : time.slice(0, 1) + num
@@ -99,14 +94,17 @@ export class TimerInput {
   }
 
   private incrementInputValue(inc: number): void {
-    const { type, time } = this.currentState
+    const { type, time } = this.inputData
     const value = this.parseTime(type, time, inc)
     this.writeInputValues(type, value)
   }
 
   private writeInputValues(type: InputType, value: number): void {
     this[type].textContent = addZero(value)
-    this.store.write((prevValue) => ({ ...prevValue, [type]: value }))
+    store.write((prevValue) => ({
+      ...prevValue,
+      time: { ...prevValue.time, [type]: value }
+    }))
   }
 
   private updateInputClock(value?: number): void {
@@ -130,17 +128,17 @@ export class TimerInput {
     return parsedTime
   }
 
-  updateInputValues(time?: Time): void {
-    const storeValues = this.store.values
+  updateInputValues(onTickTime?: Time): void {
+    const time = store.getByKey('time')
     this.minutes.textContent = addZero(
-      time ? time.minutes : storeValues.minutes
+      onTickTime ? onTickTime.minutes : time.minutes
     )
     this.seconds.textContent = addZero(
-      time ? time.seconds : storeValues.seconds
+      onTickTime ? onTickTime.seconds : time.seconds
     )
 
-    if (time) {
-      this.tempStore.write(time)
+    if (onTickTime) {
+      store.write((prevValue) => ({ ...prevValue, onTickTime: onTickTime }))
     }
   }
 }
