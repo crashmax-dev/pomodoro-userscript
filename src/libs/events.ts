@@ -1,5 +1,5 @@
 import { Emitter } from '@zero-dependency/emitter'
-import type { Time } from '../ui/timer-input.js'
+import type { Time } from '../libs/storage.js'
 
 type Events = {
   timer_start: (time: Time) => void

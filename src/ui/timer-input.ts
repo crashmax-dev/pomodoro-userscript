@@ -2,13 +2,9 @@ import { el } from '@zero-dependency/dom'
 import { events } from '../libs/events.js'
 import { store } from '../libs/storage.js'
 import { addZero } from '../utils.js'
+import type { Time } from '../libs/storage.js'
 
 const inputs = ['minutes', 'seconds'] as const
-
-export interface Time {
-  minutes: number
-  seconds: number
-}
 
 type InputType = typeof inputs[number]
 type InputElement = HTMLDivElement
